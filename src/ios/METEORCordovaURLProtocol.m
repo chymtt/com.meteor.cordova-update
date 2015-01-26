@@ -93,6 +93,13 @@ NSDictionary *MimeTypeMappings = nil;
 **/
 - (NSString *)filePathForURI:(NSString *)path allowDirectory:(BOOL)allowDirectory
 {
+  NSString *tempRoot = [[NSURL fileURLWithPath:NSTemporaryDirectory()] absoluteString];
+  NSString *tempPath = [[NSURL URLWithString:path] relativePath];
+  tempPath = [[NSURL fileURLWithPath:tempPath] absoluteString];
+  if ([tempPath hasPrefix:tempRoot]) {
+    return [[NSURL URLWithString:tempPath] relativePath];
+  }
+
   NSString *documentRoot = METEORDocumentRoot;
   // Part 1: Strip parameters from the url
   // E.g.: /page.html?q=22&var=abc -> /page.html
