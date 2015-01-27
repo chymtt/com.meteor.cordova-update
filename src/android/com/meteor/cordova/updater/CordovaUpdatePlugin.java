@@ -43,7 +43,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * Overrides uri resolution.
-     * 
+     *
      * Implements remapping, including adding default files (index.html) for directories
      */
     @Override
@@ -51,6 +51,14 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
         Log.v(TAG, "remapUri " + uri);
 
         String scheme = uri.getScheme();
+
+        // This is to remap contact's photo since the app is loading from remote location
+        if (scheme.equals("contact")) {
+            String u = uri.toString();
+            Uri ret = Uri.parse("content://" + u.substring(u.indexOf("://") + 3));
+            return ret;
+        }
+
         if (scheme == null || !schemes.contains(scheme)) {
             Log.d(TAG, "Scheme is not intercepted: " + scheme);
             return uri;
@@ -103,7 +111,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * Helper function that tries all the remappers, to find the first that can remap a Uri
-     * 
+     *
      * @param uri
      * @return
      */
@@ -170,7 +178,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * JS-called function, called after a hot-code-push
-     * 
+     *
      * @param wwwRoot
      * @param callbackContext
      */
@@ -182,7 +190,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * Helper function that sets up the resolver ordering
-     * 
+     *
      * @param wwwRoot
      * @param cordovajsRoot
      */
@@ -266,7 +274,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * JS-called function, that returns cordovajsRoot as set previously
-     * 
+     *
      * @param callbackContext
      * @return
      */
@@ -278,7 +286,7 @@ public class CordovaUpdatePlugin extends CordovaPlugin {
 
     /**
      * JS-called function, that starts the url interception
-     * 
+     *
      * @param callbackContext
      * @return
      */
