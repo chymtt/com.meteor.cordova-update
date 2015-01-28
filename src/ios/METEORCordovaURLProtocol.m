@@ -96,6 +96,7 @@ NSDictionary *MimeTypeMappings = nil;
   NSString *tempRoot = [[NSURL fileURLWithPath:NSTemporaryDirectory()] absoluteString];
   NSString *tempPath = [[NSURL URLWithString:path] relativePath];
   tempPath = [[NSURL fileURLWithPath:tempPath] absoluteString];
+  tempRoot = [tempRoot stringByReplacingOccurrencesOfString:@"file:///private" withString:@"file://"];
   if ([tempPath hasPrefix:tempRoot]) {
     return [[NSURL URLWithString:tempPath] relativePath];
   }
