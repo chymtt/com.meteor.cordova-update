@@ -96,9 +96,17 @@ NSDictionary *MimeTypeMappings = nil;
   NSString *tempRoot = [[NSURL fileURLWithPath:NSTemporaryDirectory()] absoluteString];
   NSString *tempPath = [[NSURL URLWithString:path] relativePath];
   tempPath = [[NSURL fileURLWithPath:tempPath] absoluteString];
-  tempRoot = [tempRoot stringByReplacingOccurrencesOfString:@"file:///private" withString:@"file://"];
-  if ([tempPath hasPrefix:tempRoot]) {
-    return [[NSURL URLWithString:tempPath] relativePath];
+  //  tempRoot = [tempRoot stringByReplacingOccurrencesOfString:@"file:///private" withString:@"file://"];
+  NSString *tempPath2 = [tempPath substringFromIndex:7];
+  tempRoot = [tempRoot substringFromIndex:7];
+  NSRange range = [tempPath2 rangeOfString:@"/tmp"];
+  if (range.location != NSNotFound) {
+    tempPath2 = [tempPath2 substringToIndex:NSMaxRange(range)];
+    NSRange range1 = [tempRoot rangeOfString:tempPath2];
+    NSRange range2 = [tempPath2 rangeOfString:tempRoot];
+    if (range1.location != NSNotFound || range2.location != NSNotFound) {
+      return [[NSURL URLWithString:tempPath] relativePath];
+    }
   }
 
   NSString *documentRoot = METEORDocumentRoot;
